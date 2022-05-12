@@ -1,44 +1,43 @@
 require("dotenv").config();
 const express = require("express");
-const axios = require("axios");
+const formidable = require("express-formidable");
+const mongoose = require("mongoose");
 const cors = require("cors");
 const morgan = require("morgan");
 
 const app = express();
-
-app.use(cors());
+app.use(formidable());
 app.use(morgan("dev"));
+app.use(cors());
 
-app.get("/", (req, res) => {
-  res.json("Welcome to Marvel API !");
-});
+mongoose.connect(process.env.MONGODB_URI);
 
-//List of comics
-app.get("/comics", async (req, res) => {
-  try {
-    const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.MARVEL_API_KEY}`
-    );
-    res.json(response.data);
-  } catch (error) {
-    console.log(error.message);
-  }
-});
+const signup = require("./routes/signup");
+app.use(signup);
 
-//List of comics containing a specific character
+const login = require("./routes/login");
+app.use(login);
 
-//List of characters
-app.get("/characters", async (req, res) => {
-  try {
-    const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.MARVEL_API_KEY}`
-    );
-    res.json(response.data);
-  } catch (error) {
-    console.log(error.message);
-  }
+const comics = require("./routes/comics");
+app.use(comics);
+
+const comic = require("./routes/comic");
+app.use(comic);
+
+const characters = require("./routes/characters");
+app.use(characters);
+
+const character = require("./routes/character");
+app.use(character);
+
+const fav = require("./routes/fav");
+app.use(fav);
+
+app.all("*", (res) => {
+  console.log("all routes");
+  res.status(400).json({ message: "Page doesn't exist" });
 });
 
 app.listen(process.env.PORT, () => {
-  console.log("Server started !!");
+  console.log("Server started");
 });
