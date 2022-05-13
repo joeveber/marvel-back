@@ -4,13 +4,13 @@ const router = express.Router();
 const User = require("../models/User.js");
 
 router.post("/fav", async (req, res) => {
-  console.log("login route");
-  const { idfav, email } = req.fields;
+  console.log("fav route");
+  const { idfav, token } = req.fields;
 
   res.json(idfav + " added to your favs");
 
   const foundUser = await User.findOne({
-    email: email,
+    token: token,
   });
 
   foundUser.favs.push(idfav);
