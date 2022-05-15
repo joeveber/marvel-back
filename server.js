@@ -36,6 +36,9 @@ app.use(fav);
 const allfavs = require("./routes/allfavs");
 app.use(allfavs);
 
+const deletefav = require("./routes/deletefav");
+app.use(deletefav);
+
 app.all("*", (res) => {
   console.log("all routes");
   res.status(400).json({ message: "Page doesn't exist" });

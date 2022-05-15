@@ -32,7 +32,7 @@ router.post("/signup", async (req, res) => {
           token: token,
           hash: hash,
           salt: salt,
-          favs: [0],
+          favs: [],
         });
         await newUser.save();
         res.json({

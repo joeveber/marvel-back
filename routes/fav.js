@@ -7,16 +7,18 @@ router.post("/fav", async (req, res) => {
   console.log("fav route");
   const { idfav, token } = req.fields;
 
-  res.json(idfav + " added to your favs");
-
   const foundUser = await User.findOne({
     token: token,
   });
 
-  foundUser.favs.push(idfav);
-  console.log(foundUser.favs);
-
-  foundUser.save();
+  console.log(foundUser.favs.indexOf(idfav));
+  if (foundUser.favs.indexOf(idfav) === -1) {
+    foundUser.favs.push(idfav);
+    foundUser.save();
+    res.json("working");
+  } else {
+    res.json("Ce comic est déjà dans vos favoris");
+  }
 });
 
 module.exports = router;
